@@ -1,0 +1,51 @@
+<style>
+
+.btn-hover {
+    width: 200px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    margin: 20px;
+    height: 55px;
+    text-align:center;
+    border: none;
+    background-size: 300% 100%;
+
+    border-radius: 50px;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.btn-hover:hover {
+    background-position: 100% 0;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.btn-hover:focus {
+    outline: none;
+}
+
+.btn-hover.color-1 {
+    background-image: linear-gradient(to right, #fa7c30, #e8dd33, #04befe, #fcef28);
+    box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
+}
+
+</style>
+
+
+
+<div class="buttons"> 
+<button class="btn-hover color-1"><a a class="fancybox" href="#contact_form_pop" style="color: white; margin: none;">Get #2000 Free Now</a></button>
+<div class="fancybox-hidden" style="display: none;">
+
+<div id="contact_form_pop">[contact-form-7 id="117543" title="sales form"]</div>
+
+
+</div>
+</div>
