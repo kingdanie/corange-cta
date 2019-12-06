@@ -1,0 +1,421 @@
+<?php
+/**
+ * DrFuri Core functions and definitions
+ *
+ * @package Martfury
+ */
+
+
+/**
+ * Sets up theme defaults and registers support for various WordPress features.
+ *
+ * @since  1.0
+ *
+ * @return void
+ */
+ 
+ function wpuf_unique_product_sku_notice( $error ) {
+    if ( isset( $_POST['_sku'] ) ) {
+        global $wpdb;
+        $sku = $_POST['_sku'];
+        $product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $sku ) );
+        if ( $product_id ) {
+            return __( 'SKU is not unique, you must enter unique SKU' );
+        }
+    }
+    return '';
+}
+add_filter( 'wpuf_update_post_validate', 'wpuf_unique_product_sku_notice' );
+add_filter( 'wpuf_add_post_validate', 'wpuf_unique_product_sku_notice' );
+
+
+function remove_menus() {
+    //exit;
+      remove_menu_page( 'wp-mail-smtp' );
+    remove_menu_page( 'woocommerce' );
+    remove_menu_page( 'hmwp_settings');
+    remove_menu_page( 'edit.php?post_type=shop_order');
+	remove_menu_page( 'index.php' );               
+	remove_menu_page( 'jetpack' );                    
+	remove_menu_page( 'edit.php' );                  
+	remove_menu_page( 'upload.php' );                 
+	remove_menu_page( 'edit.php?post_type=page' );    
+	remove_menu_page( 'edit-comments.php' );          
+	remove_menu_page( 'themes.php' );                 
+	remove_menu_page( 'plugins.php' );               
+               
+	remove_menu_page( 'hmwp_settings' );                  
+	remove_menu_page( 'options-general.php' );   
+	 remove_menu_page( 'admin.php' );
+}
+/*
+ $current_user_roles = wp_get_current_user()->roles;
+ 
+ if(in_array("product-manger",$current_user_roles)){
+
+add_action( 'admin_menu', 'remove_menus' );
+
+}
+
+ if(in_array("vendor_manager",$current_user_roles)){
+
+add_action( 'admin_menu', 'remove_menus' );
+//echo "Hello";
+}
+
+ 
+ 
+add_action( 'widgets_init', 'martfury_register_sidebar' );
+ */
+
+add_action( 'template_redirect', 'wpb_change_search_url' ); 
+
+function wpb_change_search_url() {
+    if(isset($_GET['s'])){
+     if ( $_GET['s'] === "" ) {
+         
+            wp_redirect(home_url());
+            exit;
+         
+     }
+    if ( is_search() && ! empty( $_GET['s'] ) && empty($_GET['post_type'])) {
+       
+        wp_redirect( home_url( "/shop?s=" ) . urlencode( $_GET['s']  ).'&post_type=product' );
+        exit();
+    }   
+    }
+}
+
+add_action('woocommerce_before_add_to_cart_button','add_more_info');
+
+ function add_more_info(){
+      
+    global $woo_options;
+     
+    global $post;
+    
+   if (  $post ) {
+    ////$post = $post->ID;
+    	$_product = wc_get_product( $post );
+
+       if(isset($_product) && !empty($_product)){
+					    
+						$product_data = $_product->get_data();					
+						$product_id = $_product->get_id();
+						$author     = get_user_by( 'id', $_product->post->post_author );
+						$store_info = dokan_get_store_info( $author->ID );
+						
+						$state ="";
+						
+						$state = $store_info['address']['state'];
+						
+						$stateInfo['AN'] = 'Lagos';
+						
+						$stateInfo['Abuja'] = 'Abuja';
+						
+						$stateInfo['Abj'] = 'Abuja';
+						
+						$stateInfo['LAG'] = 'Lagos';
+						
+						$stateInfo['LG'] = 'Lagos';
+						
+						$stateInfo['LA'] = 'Lagos';
+						
+						if($state!=""){
+						    
+						    
+						    if($stateInfo[$state]!=""){
+						        
+						        $state = "This item ships from: ".$stateInfo[$state].".";
+						        
+						    }
+						    else {
+						        
+						        $state = "This item ships from: ".$state.".";
+						        
+						    }
+						    
+						    
+						}
+						
+
+$shipping['4']['month'] = date('F', strtotime('3 weekday'));
+$shipping['4']['dayfull'] = date('l', strtotime('3 weekday'));
+$shipping['4']['daynumber'] = date('j', strtotime('3 weekday'));
+
+		   $shipping['5']['month'] = date('F', strtotime('5 weekday'));
+$shipping['5']['dayfull'] = date('l', strtotime('5 weekday'));
+$shipping['5']['daynumber'] = date('j', strtotime('5 weekday'));
+
+$shipping['6']['month'] = date('F', strtotime('6 weekday'));
+$shipping['6']['dayfull'] = date('l', strtotime('6 weekday'));
+$shipping['6']['daynumber'] = date('j', strtotime('6 weekday'));
+
+$shipping['7']['month'] = date('F', strtotime('7 weekday'));
+$shipping['7']['dayfull'] = date('l', strtotime('7 weekday'));
+$shipping['7']['daynumber'] = date('j', strtotime('7 weekday'));
+
+$suffix = '';
+
+foreach($shipping as $key=> $value){
+    
+    if($value['daynumber']=="1"||$value['daynumber']=="21"||$value['daynumber']=="31"){
+        
+        $suffix = "st";
+        
+    }
+    else if($value['daynumber']=="2"||$value['daynumber']=="22"){
+        
+        $suffix = "nd";
+        
+    }
+    
+       else if($value['daynumber']=="3"||$value['daynumber']=="23"){
+        
+        $suffix = "nd";
+        
+    }
+    else {
+        
+         $suffix = "th";
+        
+    }
+    
+    
+}
+
+ $payment_text = "
+ <div class='col-md-12' style='background:#fff; padding:8px; border-radius:4px;margin-bottom:4px;'>".$state." <p></p>24 hours delivery in Lagos. 2-4 Days for other locations</div>
+ <div class='col-md-12' style='background:#fff; padding:8px; border-radius:4px;margin-bottom:4px;'>You can <strong>PAY ONLINE</strong> or <strong>PAY ON DELIVERY</strong>. Please note that pay on delivery is limited to certain locations and certain amounts.</div>";
+   $return = "<div class='col-md-12' style='background:#fff; padding:8px; border-radius:4px;margin-bottom:4px;'>Free return within 5 Days for eligible items. Read our return policy</div>";
+			   
+			   $shipping_text = "<div class='col-md-12' style='background:#fff; padding:8px; border-radius:4px;margin-bottom:4px;'>This order will be delivered by ".$shipping['4']['dayfull'].", ".$shipping['4']['daynumber'].$suffix."  ".$shipping['4']['month']." for locations outside our 24 hours delivery zone.</div>";
+
+		   $sellername=$author->user_nicename;
+		   if($sellername=="globalmall"){
+			   
+			   $payment_text = "<div class='col-md-12' style='background:#fff; padding:8px; border-radius:4px;margin-bottom:4px;'>This order will be shipped from our abroad fulfillment center so <strong>PAY ON DELIVERY OPTION</strong> is not available.</div>";
+			   
+			   $shipping_text = "<div class='col-md-12' style='background:#fff; padding:8px; border-radius:4px;margin-bottom:4px;'>This order will be delivered by ".$shipping['7']['dayfull'].", ".$shipping['7']['daynumber'].$suffix."  ".$shipping['7']['month'].". It can take extra 7 days if you choose a slower shipping method during checkout.</div>";
+			   
+			   $return = "<div class='col-md-12' style='background:#fff; padding:8px; border-radius:4px;margin-bottom:4px;'>Free return within 5 Days for eligible items. Read our return policy.</div>";
+			   
+			   $warranty = "<div class='col-md-12' style='background:#fff; padding:8px; border-radius:4px;margin-bottom:4px;'>Free return within 5 Days for eligible items Read our return policy</div>";
+		   }
+		   
+		   $add_data = '<div  style="background:#f2f2f2; border:1px solid #c8c8c8; border-radius:4px; margin:0px; padding:5px; min-width:200px; display:block; clear:both; overflow:hidden; float:none;  margin-botttom:10px;">
+		   
+		   
+		<div class="col-md-12" style="background:#d32d2d; color:#fff; border-radius:4px; margin-bottom:5px;">
+		  Please read before buying.
+		</div>
+	   <div class="col-md-12" style="padding:0px;">'.$payment_text.'
+		   <p></p>'.$shipping_text.'<p></p>'.$return.'
+		</div>
+	
+	</div><div style="height:10px"></div>';
+	
+echo  $add_data;
+						
+					}
+  }
+
+
+
+}
+
+
+
+
+
+function martfury_setup() {
+	// Sets the content width in pixels, based on the theme's design and stylesheet.
+	$GLOBALS['content_width'] = apply_filters( 'martfury_content_width', 840 );
+
+	// Make theme available for translation.
+	load_theme_textdomain( 'martfury', get_template_directory() . '/lang' );
+
+	// Theme supports
+	add_theme_support( 'woocommerce' );
+	add_theme_support( 'wc-product-gallery-zoom' );
+	add_theme_support( 'wc-product-gallery-slider' );
+	add_theme_support( 'automatic-feed-links' );
+	add_theme_support( 'title-tag' );
+	add_theme_support( 'post-thumbnails' );
+	add_theme_support( 'post-formats', array( 'audio', 'gallery', 'video', 'quote', 'link' ) );
+	add_theme_support(
+		'html5', array(
+			'comment-list',
+			'search-form',
+			'comment-form',
+			'gallery',
+		)
+	);
+
+	if ( martfury_fonts_url() ) {
+		add_editor_style( array( 'css/editor-style.css', martfury_fonts_url() ) );
+	} else {
+		add_editor_style( 'css/editor-style.css' );
+	}
+
+	// Load regular editor styles into the new block-based editor.
+	add_theme_support( 'editor-styles' );
+
+	// Load default block styles.
+	add_theme_support( 'wp-block-styles' );
+
+	// Add support for responsive embeds.
+	add_theme_support( 'responsive-embeds' );
+
+	add_theme_support( 'align-wide' );
+
+	add_theme_support( 'align-full' );
+
+	// Register theme nav menu
+	$nav_menu = array(
+		'primary'         => esc_html__( 'Primary Menu', 'martfury' ),
+		'shop_department' => esc_html__( 'Shop By Department Menu', 'martfury' ),
+		'mobile'          => esc_html__( 'Mobile Header Menu', 'martfury' ),
+		'category_mobile' => esc_html__( 'Mobile Category Menu', 'martfury' ),
+		'user_logged'     => esc_html__( 'User Logged Menu', 'martfury' ),
+	);
+	if ( martfury_has_vendor() ) {
+		$nav_menu['vendor_logged'] = esc_html__( 'Vendor Logged Menu', 'martfury' );
+	}
+	register_nav_menus( $nav_menu );
+
+	add_image_size( 'martfury-blog-grid', 380, 300, true );
+	add_image_size( 'martfury-blog-list', 790, 510, true );
+	add_image_size( 'martfury-blog-masonry', 370, 588, false );
+
+	global $martfury_woocommerce;
+	$martfury_woocommerce = new Martfury_WooCommerce;
+
+	global $martfury_mobile;
+	$martfury_mobile = new Martfury_Mobile;
+
+	global $martfury_wcfm;
+	$martfury_wcfm = new Martfury_WCFM;
+
+}
+
+add_action( 'after_setup_theme', 'martfury_setup', 100 );
+
+/**
+ * Register widgetized area and update sidebar with default widgets.
+ *
+ * @since 1.0
+ *
+ * @return void
+ */
+function martfury_register_sidebar() {
+	// Register primary sidebar
+	$sidebars = array(
+		'blog-sidebar'    => esc_html__( 'Blog Sidebar', 'martfury' ),
+		'topbar-left'     => esc_html__( 'Topbar Left', 'martfury' ),
+		'topbar-right'    => esc_html__( 'Topbar Right', 'martfury' ),
+		'topbar-mobile'   => esc_html__( 'Topbar on Mobile', 'martfury' ),
+		'header-bar'      => esc_html__( 'Header Bar', 'martfury' ),
+		'post-sidebar'    => esc_html__( 'Single Post Sidebar', 'martfury' ),
+		'page-sidebar'    => esc_html__( 'Page Sidebar', 'martfury' ),
+		'catalog-sidebar' => esc_html__( 'Catalog Sidebar', 'martfury' ),
+		'product-sidebar' => esc_html__( 'Single Product Sidebar', 'martfury' ),
+		'footer-links'    => esc_html__( 'Footer Links', 'martfury' ),
+	);
+
+	if ( class_exists( 'WC_Vendors' ) || class_exists( 'WCMp' ) ) {
+		$sidebars['vendor_sidebar'] = esc_html( 'Vendor Sidebar', 'martfury' );
+	}
+
+	// Register footer sidebars
+	for ( $i = 1; $i <= 6; $i ++ ) {
+		$sidebars["footer-sidebar-$i"] = esc_html__( 'Footer', 'martfury' ) . " $i";
+	}
+
+	$custom_sidebar = martfury_get_option( 'custom_product_cat_sidebars' );
+	if ( $custom_sidebar ) {
+		foreach ( $custom_sidebar as $sidebar ) {
+			$title                                = $sidebar['title'];
+			$sidebars[ sanitize_title( $title ) ] = $title;
+		}
+	}
+
+	// Register sidebars
+	foreach ( $sidebars as $id => $name ) {
+		register_sidebar(
+			array(
+				'name'          => $name,
+				'id'            => $id,
+				'before_widget' => '<div id="%1$s" class="widget %2$s">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h4 class="widget-title">',
+				'after_title'   => '</h4>',
+			)
+		);
+	}
+
+}
+
+add_action( 'widgets_init', 'martfury_register_sidebar' );
+
+/**
+ * Load theme
+ */
+
+// customizer hooks
+
+require get_template_directory() . '/inc/mobile/theme-options.php';
+require get_template_directory() . '/inc/vendors/theme-options.php';
+require get_template_directory() . '/inc/backend/customizer.php';
+
+// layout
+require get_template_directory() . '/inc/functions/layout.php';
+
+require get_template_directory() . '/inc/functions/entry.php';
+
+
+// Woocommerce
+require get_template_directory() . '/inc/frontend/woocommerce.php';
+
+// Vendor
+require get_template_directory() . '/inc/vendors/vendors.php';
+
+// WC Frontend Manager
+require get_template_directory() . '/inc/frontend/wcfm.php';
+
+require get_template_directory() . '/inc/frontend/dokan.php';
+
+// Mobile
+require get_template_directory() . '/inc/libs/mobile_detect.php';
+require get_template_directory() . '/inc/mobile/layout.php';
+
+require get_template_directory() . '/inc/functions/media.php';
+
+if ( is_admin() ) {
+	require get_template_directory() . '/inc/libs/class-tgm-plugin-activation.php';
+	require get_template_directory() . '/inc/backend/plugins.php';
+	require get_template_directory() . '/inc/backend/meta-boxes.php';
+	require get_template_directory() . '/inc/backend/product-cat.php';
+	require get_template_directory() . '/inc/backend/product-meta-box-data.php';
+	require get_template_directory() . '/inc/backend/woocommerce.php';
+	require get_template_directory() . '/inc/mega-menu/class-mega-menu.php';
+	require get_template_directory() . '/inc/backend/editor.php';
+
+} else {
+	// Frontend functions and shortcodes
+
+	require get_template_directory() . '/inc/functions/nav.php';
+	require get_template_directory() . '/inc/functions/header.php';
+	require get_template_directory() . '/inc/functions/breadcrumbs.php';
+	require get_template_directory() . '/inc/mega-menu/class-mega-menu-walker.php';
+	require get_template_directory() . '/inc/mega-menu/class-mobile-walker.php';
+	require get_template_directory() . '/inc/functions/comments.php';
+	require get_template_directory() . '/inc/functions/footer.php';
+
+	// Frontend hooks
+	require get_template_directory() . '/inc/frontend/layout.php';
+	require get_template_directory() . '/inc/frontend/header.php';
+	require get_template_directory() . '/inc/frontend/nav.php';
+	require get_template_directory() . '/inc/frontend/entry.php';
+	require get_template_directory() . '/inc/frontend/footer.php';
+}
