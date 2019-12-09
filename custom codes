@@ -33,5 +33,20 @@ function woo_custom_shipping_tab( $tabs ) {
 }
 
 function woo_custom_shipping_tab_content() {
-	echo '<p>Pay on delivery is only applicable for items below #40,000 and applicable only to these locations: Abuja, Lagos, Akwa Ibom (Uyo), Anambra, Cross River (Calabar), Delta (Agbor, Asaba, Warri), Edo (Benin City), Enugu, Imo (Owerri), Ogun and Oyo states.</p>';
+	echo '<p>The following locations are categorized as Other Cities and as such, have longer delivery timelines: Kebbi, Zamfara, Sokoto, Katsina, Jigawa, Yobe, Borno, Adamawa, Taraba, Bauchi.
+
+The timelines quoted are business days only: Mondays to Fridays excluding weekends. This is subject to the delivery option chosen:<br/><br/>
+
+<strong>DOOR DELIVERY</strong>: Delivery time starts from the day your order is placed to the day when you have been notified of the delivery. Delivery will be attempted 3 times over 4 days (8:00 am to 6:00 pm).
+PICK UP STATIONS: Delivery time starts from the day your order is placed to the day an SMS is sent to you to pick up your order from our pick up station. Please ensure you pick up your order within 4 days, otherwise it will be cancelled. <br/><br/>
+ 
+<strong>PAY ON DELIVERY</strong>: This is only applicable for items below ₦40,000 and applicable only to these locations: Abuja, Lagos, Akwa Ibom (Uyo), Anambra, Cross River (Calabar), Delta (Agbor, Asaba, Warri), Edo (Benin City), Enugu, Imo (Owerri), Ogun and Oyo states. <br/><br/>
+
+<strong>ZUTA DIRECT</strong>: Products are stored in the Zuta warehouse which ensures they are shipped quickly. <br/><br/>
+
+<strong>STANDARD SHIPPING</strong>: Products are held in stock with sellers and shipped once received in our Zhub. <br/><br/>
+
+<strong>SHIPPED FROM OVERSEAS</strong>: Products are shipped from overseas. <br/>
+Express Shipping from Overseas: Zuta Express shipping from overseas get delivered to you as fast as possible within the stipulated timeline. But this comes with an extra charge for shipping on the item. <br/>
+Standard Shipping from Overseas: Zuta Express shipping from overseas get delivered to you at the stipulated timeline. This has no extra charge for shipping.</p>';
 }
