@@ -1,0 +1,37 @@
+<?php
+/**
+ * Plugin Name: Custom code
+ * Plugin URI: http://zuta.ng
+ * Description: Inserts custom scripts and functions to zuta.ng.
+ * Version: 1.0
+ * Author: Zuta
+ * Author URI: http://zuta.ng
+ */
+function contact_form_7_redir() {
+  if (is_page ('117031')) { 
+    ?>
+    <script type="text/javascript">
+           // redirects to page after submit
+           document.addEventListener( 'wpcf7mailsent', function( event ) {
+               location = 'http://www.zuta.ng/sales_thank_you/';
+               
+           }, false );
+        </script>
+    <?php
+  }
+}
+add_action('wp_head', 'contact_form_7_redir');
+
+
+//Customize product data tabs
+add_filter( 'woocommerce_product_tabs', 'woo_custom_shipping_tab', 98 );
+function woo_custom_shipping_tab( $tabs ) {
+
+	$tabs['shipping']['callback'] = 'woo_custom_shipping_tab_content';	// Custom description callback
+
+	return $tabs;
+}
+
+function woo_custom_shipping_tab_content() {
+	echo '<p>Pay on delivery is only applicable for items below #40,000 and applicable only to these locations: Abuja, Lagos, Akwa Ibom (Uyo), Anambra, Cross River (Calabar), Delta (Agbor, Asaba, Warri), Edo (Benin City), Enugu, Imo (Owerri), Ogun and Oyo states.</p>';
+}
